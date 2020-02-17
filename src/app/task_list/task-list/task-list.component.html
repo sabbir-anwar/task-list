@@ -5,44 +5,53 @@
   <mat-card-content>
     <form class="example-form">
       <div>
-        <mat-form-field class="common_form">
-          <label>task title</label>
-          <input matInput>
-        </mat-form-field>
-
-        <mat-form-field class="common_form">
-          <label>Choose a Date</label>
-          <input matInput [matDatepicker]="picker">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary">Submit</button>
+          <mat-form-field class="common_form">
+            <label>User Name</label>
+            <input matInput [(ngModel)]="userName" name="userName">
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="selectUser()">Search User</button>
+          <p *ngIf="!selectedUser" style="color: crimson;">User Name: Sabbir, Anwar, Protik</p>
+          <p *ngIf="!selectedUser" style="color: crimson;">{{message}}</p>
       </div>
+      <div *ngIf="selectedUser">
+        <div>
+          <mat-form-field class="common_form">
+            <label>task title</label>
+            <input matInput [(ngModel)]="taskName" name="taskName">
+          </mat-form-field>
 
-      <mat-tab-group>
-        <mat-tab label="Done">
-          <ul>
-            <li>Content 1</li>
-            <li>Content 2</li>
-            <li>Content 3</li>
-          </ul>
-        </mat-tab>
-        <mat-tab label="Late">
-          <ul>
-            <li>Content 4</li>
-            <li>Content 5</li>
-            <li>Content 6</li>
-          </ul>
-        </mat-tab>
-        <mat-tab label="On Time">
-          <ul>
-            <li>Content 7</li>
-            <li>Content 8</li>
-            <li>Content 9</li>
-          </ul>
-        </mat-tab>
-      </mat-tab-group>
+          <mat-form-field class="common_form">
+            <label>Choose a Date</label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="taskDate" name="taskDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" (click)="addTask()">Submit</button>
+        </div>
+        <mat-tab-group>
+            <mat-tab label="To Do">
+                <ul *ngIf="selectedUser">
+                  <li *ngFor="let item of selectedUser.task">{{item.taskname}} {{item.date | date}}</li>
+                </ul>
+              </mat-tab>
+          <mat-tab label="Done">
+            <ul *ngIf="selectedUser">
+              <li *ngFor="let item of selectedUser.done">{{item.taskname}} {{item.date}}</li>
+            </ul>
+          </mat-tab>
+          <mat-tab label="Late">
+            <ul *ngIf="selectedUser">
+              <li *ngFor="let item of selectedUser.late">{{item.taskname}} {{item.date}}</li>
+            </ul>
+          </mat-tab>
+          <mat-tab label="On Time">
+            <ul *ngIf="selectedUser">
+              <li *ngFor="let item of selectedUser.intime">{{item.taskname}} {{item.date}}</li>
+            </ul>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
     </form>
   </mat-card-content>
 </mat-card>
